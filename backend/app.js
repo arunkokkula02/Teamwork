@@ -1,6 +1,7 @@
 
 const express = require('express');
 const bodyParser = require('body-parser');
+const usersRoutes = require('./routes/users');
 
 const app = express();
 
@@ -15,30 +16,6 @@ app.use((req, res, next) => {
 //Using body parser for json data
 app.use(bodyParser.json());
 
-
-
-
-app.use('/api/stuff', (req, res, next) => {
-    const stuff = [
-      {
-        _id: 'oeihfzeoi',
-        title: 'My first thing',
-        description: 'All of the info about my first thing',
-        imageUrl: '',
-        price: 4900,
-        userId: 'qsomihvqios',
-      },
-      {
-        _id: 'oeihfzeomoihi',
-        title: 'My second thing',
-        description: 'All of the info about my second thing',
-        imageUrl: '',
-        price: 2900,
-        userId: 'qsomihvqios',
-      },
-    ];
-    res.status(200).json(stuff);
-  });
-
+app.use('/users', usersRoutes);
 
 module.exports = app;
