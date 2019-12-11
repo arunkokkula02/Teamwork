@@ -22,4 +22,27 @@ exports.getArticles= (request, response) => {
 
 
 //Function for editing an existing or specific article
+exports.updateArticle = (request, response) => {
+    const id = parseInt(request.params.id)
+    const { title, article } = request.body
+  
+    db.query('UPDATE articles SET title = $1, article = $2 WHERE id = $3',[title, article, id],(error, results) => {
+        if (error) {
+          throw error
+        }
+        response.status(200).json(`User modified with ID: ${id}`)
+      }
+    )
+  }
 
+//Function to delete a specific article on the database
+  exports.deleteArticle = (request, response) => {
+    const id = parseInt(request.params.id)
+  
+    db.query('DELETE FROM articles WHERE id = $1', [id], (error, results) => {
+      if (error) {
+        throw error
+      }
+      response.status(200).json(`User deleted with ID: ${id}`)
+    })
+  }
