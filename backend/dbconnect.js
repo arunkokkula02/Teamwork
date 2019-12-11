@@ -1,10 +1,10 @@
-const { Pool } = require('pg')
+const { Pool } = require('pg');
+const dotenv = require('dotenv');
+
+dotenv.config();
+
 const pool = new Pool({
-  user: 'caleb',
-  host: 'localhost',
-  database: 'apidb',
-  password: 'nyambane123',
-  port: 5432,
+  connectionString:process.env.DATABASE_URL
 })
 
 module.exports = pool
