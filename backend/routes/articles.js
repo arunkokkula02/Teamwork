@@ -1,13 +1,14 @@
 const express = require('express');
 const articlesCtrl = require('../controllers/articles');
+const Auth = require('../middileware/Auth')
 
 const router = express.Router();
-router.post('/', articlesCtrl.createArticle);
-router.get('/', articlesCtrl.getArticles);
-router.get('/:id', articlesCtrl.getArticleById);
-router.put('/:id', articlesCtrl.updateArticle);
-router.delete('/:id', articlesCtrl.deleteArticle);
-router.post('/:id/comment',articlesCtrl.commentOnArticle);
+router.post('/', Auth.verifyToken, articlesCtrl.createArticle);
+router.get('/',Auth.verifyToken, articlesCtrl.getArticles);
+router.get('/:id', Auth.verifyToken,articlesCtrl.getArticleById);
+router.put('/:id',Auth.verifyToken, articlesCtrl.updateArticle);
+router.delete('/:id',Auth.verifyToken, articlesCtrl.deleteArticle);
+router.post('/:id/comment',Auth.verifyToken,articlesCtrl.commentOnArticle);
 
 
 

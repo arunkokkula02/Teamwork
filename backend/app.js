@@ -3,6 +3,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const usersRoutes = require('./routes/users');
 const articlesRoutes = require('./routes/articles');
+const gifsRoutes = require('./routes/gifs');
+const path = require('path');
 
 const app = express();
 
@@ -14,10 +16,16 @@ app.use((req, res, next) => {
     next();
   });
 
+//Allow our app get access to static folders such as CSS/IMAGE folders
+//app.use(express.static(path.join(__dirname, 'public')));
+app.use('/images', express.static(path.join(__dirname, 'images')));
+
 //Using body parser for json data
 app.use(bodyParser.json());
 
+//Access routes for incoming requests
 app.use('/users', usersRoutes);
 app.use('/articles', articlesRoutes);
+app.use('/gifs', gifsRoutes);
 
 module.exports = app;

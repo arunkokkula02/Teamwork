@@ -1,22 +1,29 @@
 const db = require('../dbconnect');
 
 //Function for creating a new article to the database
-exports.createArticle = (req, res) => {
-  const {title,article,user_id} = req.body
-  const created_on =  new Date()
-  db.query('INSERT INTO articles (title,article,created_on,user_id) VALUES ($1, $2, $3, $4)', [title,article,created_on,user_id]).
-  then( () => {res.status(201).json({message: 'Article created successfully!' });}).
-  catch( (error) => res.status(500).json({error: error }))
+exports.createArticle = async(req, res) => {
+  const {title,article} = req.body
+  const user_id = req.user.id
+  const created_on = new Date()
+  const text = 'INSERT INTO articles (title,article,created_on,user_id) VALUES ($1, $2, $3, $4)'
+  const values = [title,article,created_on,user_id]
+
+  try{
+      const {rows}= await db.query(text,values )
+      return res.status(201).json({status: 'success' });
+    }catch(error){
+        return res.status(400).json({error: error })
+    }
   
 }
 
 //Function to view articles created on the database
-exports.getArticles= (request, response) => {
+exports.getArticles= (req, res) => {
     db.query('SELECT * FROM articles ORDER BY id ASC', (error, results) => {
       if (error) {
         throw error
       }
-      response.status(200).json(results.rows)
+      res.status(200).json(results.rows)
     })
   }
 
@@ -61,7 +68,8 @@ exports.updateArticle = (request, response) => {
   //Function to comment on article
   exports.commentOnArticle = (req,res) => {
     const article_id = parseInt(req.params.id)
-    const {comment,user_id} = req.body
+    const {comment} = req.body
+    const user_id = req.user.id
     const created_on = new Date()
     db.query('INSERT INTO comments (comment,created_on,user_id,article_id) VALUES ($1, $2, $3, $4)', [comment,created_on,user_id,article_id], (error, results) => {
         if (error) {
